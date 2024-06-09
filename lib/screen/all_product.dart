@@ -25,7 +25,9 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('All Products'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        title: const Text('Product List'),
       ),
       body: FutureBuilder<List<Product>>(
         future: products,
@@ -57,6 +59,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                   },
                   child: Card(
                     elevation: 5,
+                    surfaceTintColor: Colors.white,
                     child: Column(
                       children: [
                         Image.network(product.image, height: 150, fit: BoxFit.scaleDown),
