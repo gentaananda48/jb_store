@@ -7,8 +7,13 @@ import 'package:jb_store/models/product.dart';
 class ApiService {
   final String apiUrl = "https://fakestoreapi.com/products";
 
-  Future<List<Product>> fetchProducts() async {
-    final response = await http.get(Uri.parse(apiUrl));
+  Future<List<Product>> fetchProducts({String? category}) async {
+    String url = apiUrl;
+    if (category != null) {
+      url = "$apiUrl/category/$category";
+    }
+
+    final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -18,3 +23,4 @@ class ApiService {
     }
   }
 }
+
