@@ -1,159 +1,196 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/models/product.dart';
-import 'package:jb_store/screen/detail_screen.dart';
 import 'package:jb_store/services/api_services.dart';
+import 'package:jb_store/screen/detail_screen.dart';
 
 class AllProductsScreen extends StatefulWidget {
-  final List<Product> cart;
-
-  AllProductsScreen({required this.cart});
-
   @override
   _AllProductsScreenState createState() => _AllProductsScreenState();
 }
 
 class _AllProductsScreenState extends State<AllProductsScreen> {
-  late Future<List<Product>> products;
+  final ApiService apiService = ApiService();
+  List<Product> products = [];
+  List<Product> cart = [];
   String? selectedCategory;
 
   @override
   void initState() {
     super.initState();
-    products = ApiService().fetchProducts(); // Mengambil semua data produk dari API Fake Store
+    fetchProducts();
   }
 
-  void _filterProducts(String? category) {
-    //Fungsi untuk meng-handle filter berdasarkan kategori
-    setState(() {
-      selectedCategory = category;
-      products = ApiService().fetchProducts(category: category);
-    });
+  Future<void> fetchProducts({String? category}) async {
+    try {
+      final fetchedProducts = await apiService.fetchProducts(category: category);
+      setState(() {
+        products = fetchedProducts;
+      });
+    } catch (e) {
+      print('Failed to fetch products: $e');
+    }
   }
 
-  String capitalizeWords(String input) {
-    // Agar text menjadi Capitalize each word
-    return input.split(' ').map((word) {
-      if (word.isNotEmpty) {
-        return word[0].toUpperCase() + word.substring(1);
-      }
-      return word;
-    }).join(' ');
+  void showCategoryFilter() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.zero),
+      ),
+      builder: (BuildContext context) {
+        final categories = [
+          'All', 'Men\'s Clothing', 'Women\'s Clothing', 'Electronics', 'Jewelery'
+        ];
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Row(
+                children: [
+                  IconButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    }, 
+                    icon: Icon(Icons.close_rounded)
+                  ),
+                  Text(
+                    'Product Categories',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Divider(),
+            ...categories.map((category) {
+              return ListTile(
+                title: Text(category),
+                onTap: () {
+                  setState(() {
+                    selectedCategory = category == 'All' ? null : category.toLowerCase();
+                    fetchProducts(category: selectedCategory);
+                  });
+                  Navigator.pop(context);
+                },
+              );
+            }).toList(),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildCategoryButtons() {
+    final categories = ['All', 'Men\'s Clothing', 'Women\'s Clothing', 'Electronics', 'Jewelery'];
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: categories.map((category) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  selectedCategory = category == 'All' ? null : category.toLowerCase();
+                  fetchProducts(category: selectedCategory);
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: selectedCategory == category.toLowerCase() ? Colors.blue : Colors.white,
+                foregroundColor: selectedCategory == category.toLowerCase() ? Colors.white : Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
+              child: Text(category),
+            ),
+          );
+        }).toList(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('All Products'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        title: const Text('Product List'),
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  'Categories : ',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold
-                  ),
+                Expanded(
+                  child: buildCategoryButtons(),
                 ),
-                SizedBox(width: 15,),
-                DropdownButton<String>(
-                  value: selectedCategory,
-                  hint: const Text("Filter by Category"),
-                  items: <String>[
-                    // Menampilkan filter untuk produk
-                    'All',
-                    'electronics',
-                    'jewelery',
-                    "men's clothing",
-                    "women's clothing",
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value == 'All' ? null : value,
-                      child: Text(capitalizeWords(value)),
-                    );
-                  }).toList(),
-                  onChanged: _filterProducts,
+                IconButton(
+                  icon: Icon(Icons.filter_list),
+                  onPressed: showCategoryFilter,
                 ),
               ],
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Product>>(
-              future: products,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator()); // Memberikan loading screen ketika proses fetching produk dari API
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Failed to load products')); // Apa bila gagal fetch, maka akan me-return ini
-                } else if (snapshot.hasData) {
-                  return GridView.builder(
-                    // Fetching berhasil
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, //Dalam satu baris menampilkan 2 produk
+            child: products.isEmpty
+                ? Center(child: CircularProgressIndicator())
+                : GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                       childAspectRatio: 0.7,
                     ),
-                    itemCount: snapshot.data!.length,
+                    itemCount: products.length,
                     itemBuilder: (context, index) {
-                      Product product = snapshot.data![index];
-                      double? discountPercentage;
-                      if (product.originalPrice != null && product.originalPrice! > product.price) {
-                        discountPercentage = ((product.originalPrice! - product.price) / product.originalPrice!) * 100;
-                      }
+                      final product = products[index];
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => DetailScreen(product: product, cart: widget.cart), // Navigasi ke detail_screen.dart
+                              builder: (context) => DetailScreen(product: product, cart: cart),
                             ),
                           );
                         },
                         child: Card(
-                          elevation: 5,
                           surfaceTintColor: Colors.white,
+                          elevation: 5.0,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start, // Menempatkan text ke "start" agar tampilan lebih enak dilihat 
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Center(
-                                child: Image.network(product.image, height: 150, fit: BoxFit.contain),
+                              Image.network(
+                                product.image,
+                                fit: BoxFit.contain,
+                                height: 150,
+                                width: double.infinity,
                               ),
-                              const SizedBox(height: 8),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  product.title,
+                                  style: TextStyle(fontSize: 16),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(product.title, maxLines: 2, overflow: TextOverflow.ellipsis), // overFlow agar text yang melewati batas akan diubah menjadi elipsis
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                                child: Text('\$${product.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                              ),
-                              if (discountPercentage != null)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text(
-                                    '\$${product.originalPrice!.toStringAsFixed(2)} ${discountPercentage.toStringAsFixed(0)}% OFF',
-                                    style: const TextStyle(color: Colors.red, decoration: TextDecoration.lineThrough),
-                                  ),
+                                child: Text(
+                                  '\$${product.price}',
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
+                              ),
                             ],
                           ),
                         ),
                       );
                     },
-                  );
-                } else {
-                  return const Center(child: Text('No products available')); // Apabila tidak ada produk di API
-                }
-              },
-            ),
+                  ),
           ),
         ],
       ),

@@ -16,9 +16,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: AllProductsScreen(cart: cart), //Menghubungkan Ke all_product.dart sekaligus mendapatkan akses ke cart.dart
+      home: AllProductsScreen(), //Menghubungkan Ke all_product.dart sekaligus mendapatkan akses ke cart.dart
       routes: {
-        '/all-products': (context) => AllProductsScreen(cart: cart),
+        '/all-products': (context) => AllProductsScreen(),
       },
     );
   }
