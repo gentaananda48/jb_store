@@ -55,6 +55,14 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                Text(
+                  'Categories : ',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+                SizedBox(width: 15,),
                 DropdownButton<String>(
                   value: selectedCategory,
                   hint: const Text("Filter by Category"),

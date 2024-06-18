@@ -52,6 +52,7 @@ class _DetailScreenState extends State<DetailScreen> {
             },
           ),
         ],
+        
       ),
       body: Column(
         children: [
