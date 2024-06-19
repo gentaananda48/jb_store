@@ -47,6 +47,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
           children: [
             ListTile(
               title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
                     onPressed: (){

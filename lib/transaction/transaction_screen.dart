@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:jb_store/models/product.dart';
+import 'package:jb_store/transaction/detail_transaction.dart';
 
 class TransactionScreen extends StatefulWidget {
   final List<Product> cart;
@@ -12,13 +14,35 @@ class TransactionScreen extends StatefulWidget {
 
 class _TransactionScreenState extends State<TransactionScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _addressController = TextEditingController();
-  final _phoneController = TextEditingController();
+  final Map<String, dynamic> _transactionData = {
+    'name': '',
+    'email': '',
+    'address': '',
+    'phone': '',
+    'total': 0.0,
+  };
 
-  double calculateTotalPrice() {
-    return widget.cart.fold(0, (total, current) => total + current.price);
+  @override
+  void initState() {
+    super.initState();
+    _transactionData['total'] = widget.cart.fold(0.0, (sum, item) => sum + item.price);
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState?.save();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailTransactionScreen(
+            transactionData: _transactionData,
+            products: widget.cart,
+            cart: widget.cart,
+          ),
+        ),
+      );
+      
+    }
   }
 
   @override
@@ -36,47 +60,55 @@ class _TransactionScreenState extends State<TransactionScreen> {
           child: ListView(
             children: [
               TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: 'Recipient Name'),
+                decoration: InputDecoration(labelText: 'Name'),
+                onSaved: (value) {
+                  _transactionData['name'] = value;
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the recipient name';
+                    return 'Please enter your name';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                controller: _emailController,
                 decoration: InputDecoration(labelText: 'Email'),
+                onSaved: (value) {
+                  _transactionData['email'] = value;
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the email';
+                    return 'Please enter your email';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(labelText: 'Complete Address'),
+                decoration: InputDecoration(labelText: 'Address'),
+                onSaved: (value) {
+                  _transactionData['address'] = value;
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the complete address';
+                    return 'Please enter your address';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                controller: _phoneController,
-                decoration: InputDecoration(labelText: 'Phone Number'),
+                decoration: InputDecoration(labelText: 'Phone'),
+                onSaved: (value) {
+                  _transactionData['phone'] = value;
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the phone number';
+                    return 'Please enter your phone number';
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 20),
-              Text('Products:'),
+              SizedBox(height: 20,),
+              Text('Products: '),
               ...widget.cart.map((product) => ListTile(
                     leading: Image.network(
                       product.image,
@@ -86,44 +118,30 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     ),
                     title: Text(product.title),
                   )),
-              SizedBox(height: 20),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Total Price: \$${calculateTotalPrice().toStringAsFixed(2)}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                ' Total: \$${_transactionData['total'].toStringAsFixed(2)}',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: widget.cart.isEmpty
-                    ? null
-                    : () {
-                        if (_formKey.currentState!.validate()) {
-                          // Clear the cart and navigate back to the detail screen
-                          setState(() {
-                            widget.cart.clear();
-                          });
-
-                          Navigator.pop(context);
-                          Navigator.pop(context); 
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Transaction Complete')),
-                          );// Pass true to indicate transaction completed
-                        }
-                      },
+                onPressed: _submitForm,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Background color
-                  foregroundColor: Colors.white, // Foreground color
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
                 ),
                 child: Text('Submit'),
               ),
