@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Screen/home_screen.dart'; // Import the HomeScreen
+import 'Screen/order.dart'; // Import the HomeScreen
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreen(), // Set HomeScreen as the initial page
+      home: const OrderScreen(), // Set HomeScreen as the initial page
     );
   }
 }
