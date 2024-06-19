@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/Pages/Auth/login.dart';
+import 'package:jb_store/Pages/Profile/profile_page.dart';
+import 'package:jb_store/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,7 +35,8 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 255, 255, 255)),
         useMaterial3: true,
       ),
-      home: LoginPage(),
+      initialRoute: '/login',
+      routes: appRoutes,
     );
   }
 }

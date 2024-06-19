@@ -11,7 +11,7 @@ class BottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
@@ -29,6 +29,7 @@ class BottomNavBar extends StatelessWidget {
           label: 'Profile',
         ),
       ],
+      selectedItemColor: Color(0xFF1D4ED8),
       onTap: onTap,
     );
   }

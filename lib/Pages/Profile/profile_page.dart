@@ -3,6 +3,8 @@ import 'package:jb_store/Components/bottom_navbar.dart';
 import 'package:jb_store/Services/profile_service.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -18,11 +20,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _userData = _apiService.getUser(2);
   }
 
+  void _onItemTapped(int index) {
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        // Navigate to categories page
+        break;
+      case 2:
+        // Navigate to orders page
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/profile');
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Profile'),
+        title: const Text('My Profile'),
         actions: [
           TextButton(
             onPressed: () {
@@ -32,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             child: Text(
               _isEditing ? 'Save' : 'Edit Profile',
-              style: TextStyle(color: Colors.blue),
+              style: const TextStyle(color: Colors.blue),
             ),
           ),
         ],
@@ -41,11 +60,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         future: _userData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return Center(child: Text('No data available'));
+            return const Center(child: Text('No data available'));
           } else {
             var user = snapshot.data!;
             var nameController = TextEditingController(
@@ -61,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 50,
                     backgroundImage:
                         NetworkImage("https://via.placeholder.com/150"),
@@ -78,54 +97,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: nameController,
                     readOnly: !_isEditing,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Name',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: emailController,
                     readOnly: !_isEditing,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Email Id',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: phoneController,
                     readOnly: !_isEditing,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Mobile Number',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: locationController,
                     readOnly: !_isEditing,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Location',
                       border: OutlineInputBorder(),
                       contentPadding: EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         'Gender:',
                         style: TextStyle(fontSize: 16),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Row(
                           children: [
@@ -134,31 +153,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               groupValue: 'Gender',
                               onChanged: _isEditing
                                   ? (value) {
-                                      // Aksi untuk pilihan Male
+                                      setState(() {
+                                        // Aksi untuk pilihan Male
+                                      });
                                     }
                                   : null,
                             ),
-                            Text('Male'),
+                            const Text('Male'),
                             Radio(
                               value: 'Female',
                               groupValue: 'Gender',
                               onChanged: _isEditing
                                   ? (value) {
-                                      // Aksi untuk pilihan Female
+                                      setState(() {
+                                        // Aksi untuk pilihan Female
+                                      });
                                     }
                                   : null,
                             ),
-                            Text('Female'),
+                            const Text('Female'),
                             Radio(
                               value: 'Other',
                               groupValue: 'Gender',
                               onChanged: _isEditing
                                   ? (value) {
-                                      // Aksi untuk pilihan Other
+                                      setState(() {
+                                        // Aksi untuk pilihan Other
+                                      });
                                     }
                                   : null,
                             ),
-                            Text('Other'),
+                            const Text('Other'),
                           ],
                         ),
                       ),
@@ -172,9 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: 3,
-        onTap: (index) {
-          // Aksi untuk berpindah halaman
-        },
+        onTap: _onItemTapped,
       ),
     );
   }
