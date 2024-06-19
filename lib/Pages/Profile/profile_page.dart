@@ -10,6 +10,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  int _selectedIndex = 3; // Set this to the index for Profile
   late Future<Map<String, dynamic>> _userData;
   bool _isEditing = false;
   final ApiService _apiService = ApiService();
@@ -21,6 +22,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
     switch (index) {
       case 0:
         Navigator.pushNamed(context, '/home');
@@ -196,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
       bottomNavigationBar: BottomNavBar(
-        currentIndex: 3,
+        currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
     );
