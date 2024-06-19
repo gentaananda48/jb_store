@@ -10,10 +10,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 3; // Set this to the index for Profile
+  int _selectedIndex = 0;
   late Future<Map<String, dynamic>> _userData;
   bool _isEditing = false;
-  final ApiService _apiService = ApiService();
+  final ProfileService _apiService = ProfileService();
 
   @override
   void initState() {

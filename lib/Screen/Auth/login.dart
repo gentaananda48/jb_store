@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jb_store/Pages/home.dart';
 import 'package:jb_store/Services/auth_service.dart';
 
 class LoginPage extends StatelessWidget {
@@ -201,10 +200,7 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
     if (result['success']) {
       final data = result['data'];
       print('Login successful: $data');
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Home()),
-      );
+      Navigator.pushNamed(context, '/home');
     } else {
       print('Login failed: ${result['statusCode']}');
       // Optionally show an error message

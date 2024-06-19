@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class ApiService {
+class ProfileService {
   static const String _baseUrl = "https://fakestoreapi.com/users/";
 
   Future<Map<String, dynamic>> getUser(int id) async {
