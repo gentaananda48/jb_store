@@ -81,7 +81,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   leading: Icon(Icons.location_on),
                   title: Text('Addresses'),
                   onTap: () {
-                    // Navigate to addresses page
+                    Navigator.pushNamed(context, '/addres');
                   },
                 ),
                 ListTile(
