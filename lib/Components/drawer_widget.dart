@@ -16,6 +16,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     _userData = _profileService.getUser(2);
   }
 
+  void _logout() {
+    // Tambahkan logika logout yang diperlukan di sini, misalnya menghapus token
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -43,11 +48,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   ),
                   arrowColor: Colors.black,
                 ),
+                // Tambahkan ListTile untuk menuju halaman profil
                 ListTile(
-                  leading: Icon(Icons.grid_view),
-                  title: Text('Shop by Categories'),
+                  leading: Icon(Icons.person),
+                  title: Text('Profile'),
                   onTap: () {
-                    // Navigate to categories page
+                    Navigator.pushNamed(context, '/profile');
                   },
                 ),
                 ListTile(
@@ -102,9 +108,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ListTile(
                   leading: Icon(Icons.logout),
                   title: Text('Logout'),
-                  onTap: () {
-                    // Handle logout
-                  },
+                  onTap: _logout,
                 ),
               ],
             );

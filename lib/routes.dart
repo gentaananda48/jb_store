@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jb_store/Pages/Auth/login.dart';
-import 'package:jb_store/Pages/Profile/profile_page.dart';
-import 'package:jb_store/Pages/home_screen.dart';
+import 'package:jb_store/Screen/Auth/login.dart';
+import 'package:jb_store/Screen/Profile/profile_page.dart';
+import 'package:jb_store/Screen/home_screen.dart';
 
 Map<String, WidgetBuilder> appRoutes = {
   '/login': (context) => LoginPage(),
