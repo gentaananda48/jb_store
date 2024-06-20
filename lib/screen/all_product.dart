@@ -19,7 +19,8 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   @override
   void initState() {
     super.initState();
-    products = ApiService().fetchProducts(); // Mengambil semua data produk dari API Fake Store
+    products = ApiService()
+        .fetchProducts(); // Mengambil semua data produk dari API Fake Store
   }
 
   void _filterProducts(String? category) {
@@ -81,13 +82,18 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
               future: products,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator()); // Memberikan loading screen ketika proses fetching produk dari API
+                  return const Center(
+                      child:
+                          CircularProgressIndicator()); // Memberikan loading screen ketika proses fetching produk dari API
                 } else if (snapshot.hasError) {
-                  return const Center(child: Text('Failed to load products')); // Apa bila gagal fetch, maka akan me-return ini
+                  return const Center(
+                      child: Text(
+                          'Failed to load products')); // Apa bila gagal fetch, maka akan me-return ini
                 } else if (snapshot.hasData) {
                   return GridView.builder(
                     // Fetching berhasil
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, //Dalam satu baris menampilkan 2 produk
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
@@ -97,15 +103,22 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                     itemBuilder: (context, index) {
                       Product product = snapshot.data![index];
                       double? discountPercentage;
-                      if (product.originalPrice != null && product.originalPrice! > product.price) {
-                        discountPercentage = ((product.originalPrice! - product.price) / product.originalPrice!) * 100;
+                      if (product.originalPrice != null &&
+                          product.originalPrice! > product.price) {
+                        discountPercentage =
+                            ((product.originalPrice! - product.price) /
+                                    product.originalPrice!) *
+                                100;
                       }
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => DetailScreen(product: product, cart: widget.cart), // Navigasi ke detail_screen.dart
+                              builder: (context) => DetailScreen(
+                                  product: product,
+                                  cart: widget
+                                      .cart), // Navigasi ke detail_screen.dart
                             ),
                           );
                         },
@@ -113,26 +126,38 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                           elevation: 5,
                           surfaceTintColor: Colors.white,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start, // Menempatkan text ke "start" agar tampilan lebih enak dilihat 
+                            crossAxisAlignment: CrossAxisAlignment
+                                .start, // Menempatkan text ke "start" agar tampilan lebih enak dilihat
                             children: [
                               Center(
-                                child: Image.network(product.image, height: 150, fit: BoxFit.contain),
+                                child: Image.network(product.image,
+                                    height: 150, fit: BoxFit.contain),
                               ),
                               const SizedBox(height: 8),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(product.title, maxLines: 2, overflow: TextOverflow.ellipsis), // overFlow agar text yang melewati batas akan diubah menjadi elipsis
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(product.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow
+                                        .ellipsis), // overFlow agar text yang melewati batas akan diubah menjadi elipsis
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                                child: Text('\$${product.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 8.0),
+                                child: Text('\$${product.price}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)),
                               ),
                               if (discountPercentage != null)
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
                                   child: Text(
                                     '\$${product.originalPrice!.toStringAsFixed(2)} ${discountPercentage.toStringAsFixed(0)}% OFF',
-                                    style: const TextStyle(color: Colors.red, decoration: TextDecoration.lineThrough),
+                                    style: const TextStyle(
+                                        color: Colors.red,
+                                        decoration: TextDecoration.lineThrough),
                                   ),
                                 ),
                             ],
@@ -142,7 +167,9 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                     },
                   );
                 } else {
-                  return const Center(child: Text('No products available')); // Apabila tidak ada produk di API
+                  return const Center(
+                      child: Text(
+                          'No products available')); // Apabila tidak ada produk di API
                 }
               },
             ),

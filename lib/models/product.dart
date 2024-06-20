@@ -27,7 +27,7 @@ class Product {
       price: json['price'].toDouble(),
       category: json['category'],
       image: json['image'],
-      originalPrice: json['original_price']?.toDouble(), // Assume 'original_price' is the key from API
+      originalPrice: json['original_price']?.toDouble(),
     );
   }
 }
