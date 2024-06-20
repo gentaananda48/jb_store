@@ -3,6 +3,7 @@ import 'package:jb_store/Pages/Auth/login.dart';
 
 import 'package:jb_store/models/product.dart';
 import 'package:jb_store/screen/all_product.dart';
+import 'package:jb_store/screen/signup_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,6 +37,11 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: LoginPage(),
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/all-products': (context) => AllProductsScreen(cart: cart),
+        '/register': (context) => const SignupScreen(),
+      },
     );
   }
 }
