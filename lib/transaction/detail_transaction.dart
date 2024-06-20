@@ -21,7 +21,10 @@ class DetailTransactionScreen extends StatelessWidget {
 
     // Tampilkan SnackBar untuk konfirmasi
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Transaction Complete')),
+      SnackBar(
+        content: Text('Transaction Complete'),
+        duration: Duration(milliseconds: 500),
+      ),
     );
   }
 
@@ -86,16 +89,6 @@ class DetailTransactionScreen extends StatelessWidget {
                       child: Text(': ${transactionData['phone']}'),
                     ),
                   ]),
-                  TableRow(children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Total', style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(': \$${transactionData['total'].toStringAsFixed(2)}'),
-                    ),
-                  ]),
                 ],
               ),
               SizedBox(height: 20),
@@ -124,6 +117,51 @@ class DetailTransactionScreen extends StatelessWidget {
                   );
                 },
               ),
+              SizedBox(height: 20),
+              Text(
+                'Payment',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Table(
+                children: [
+                  TableRow(
+                    children: [
+                      Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Total', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(': \$${transactionData['total'].toStringAsFixed(2)}'),
+                    ),
+                    ]
+                  ),
+                  TableRow(
+                    children: [
+                      Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Payment Method', style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(': ${transactionData['paymentMethod']}'),
+                    ),
+                    ]
+                  ),
+                  if (transactionData['paymentMethod'] == 'PayPal')
+                    TableRow(children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('PayPal Number', style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(': ${transactionData['paypalNumber']}'),
+                      ),
+                    ]),
+                ],
+              )
             ],
           ),
         ),
@@ -136,7 +174,12 @@ class DetailTransactionScreen extends StatelessWidget {
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
           ),
-          child: Text('Back to Home Screen'),
+          child: Text(
+            'Back to Home Screen',
+            style: TextStyle(
+              fontSize: 18
+            ),
+          ),
         ),
       ),
     );

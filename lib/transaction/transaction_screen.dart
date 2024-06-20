@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:jb_store/models/product.dart';
 import 'package:jb_store/transaction/detail_transaction.dart';
 
@@ -20,7 +19,12 @@ class _TransactionScreenState extends State<TransactionScreen> {
     'address': '',
     'phone': '',
     'total': 0.0,
+    'paymentMethod': '',
+    'paypalNumber': '',
   };
+  String selectedPaymentMethod = '';
+  TextEditingController paypalController = TextEditingController();
+  bool showPaypalField = false;
 
   @override
   void initState() {
@@ -31,6 +35,26 @@ class _TransactionScreenState extends State<TransactionScreen> {
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
+      if (selectedPaymentMethod.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Please select a payment method'),
+            duration: Duration(milliseconds: 500),
+          ),
+        );
+        return;
+      }
+      if (selectedPaymentMethod == 'PayPal' && paypalController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Please enter your PayPal number'),
+            duration: Duration(milliseconds: 500),
+          ),
+        );
+        return;
+      }
+      _transactionData['paymentMethod'] = selectedPaymentMethod;
+      _transactionData['paypalNumber'] = paypalController.text;
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -41,7 +65,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
         ),
       );
-      
     }
   }
 
@@ -107,8 +130,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20,),
-              Text('Products: '),
+              SizedBox(height: 20),
+              Text('Products:'),
               ...widget.cart.map((product) => ListTile(
                     leading: Image.network(
                       product.image,
@@ -117,7 +140,54 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       fit: BoxFit.contain,
                     ),
                     title: Text(product.title),
+                    subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
                   )),
+              SizedBox(height: 20),
+              Text(
+                'Select Payment Method',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              ListTile(
+                title: const Text('PayPal'),
+                leading: Radio<String>(
+                  value: 'PayPal',
+                  groupValue: selectedPaymentMethod,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedPaymentMethod = value!;
+                      showPaypalField = true;
+                    });
+                  },
+                ),
+              ),
+              if (showPaypalField)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextFormField(
+                    controller: paypalController,
+                    decoration: InputDecoration(labelText: 'PayPal Number'),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (selectedPaymentMethod == 'PayPal' && (value == null || value.isEmpty)) {
+                        return 'Please enter your PayPal number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ListTile(
+                title: const Text('COD (Cash on Delivery)'),
+                leading: Radio<String>(
+                  value: 'COD',
+                  groupValue: selectedPaymentMethod,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedPaymentMethod = value!;
+                      showPaypalField = false;
+                    });
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -130,7 +200,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                ' Total: \$${_transactionData['total'].toStringAsFixed(2)}',
+                'Total: \$${_transactionData['total'].toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
@@ -143,7 +213,12 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
                 ),
-                child: Text('Submit'),
+                child: Text(
+                  'Submit',
+                  style: TextStyle(
+                    fontSize: 18
+                  ),
+                ),
               ),
             ),
           ],

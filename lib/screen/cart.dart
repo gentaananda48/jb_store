@@ -81,7 +81,12 @@ class _CartScreenState extends State<CartScreen> {
                       backgroundColor: Colors.blue, // Background color
                       foregroundColor: Colors.white, // Foreground color
                     ),
-                    child: Text('Checkout'),
+                    child: Text(
+                      'Checkout',
+                      style: TextStyle(
+                        fontSize: 18
+                      ),
+                    ),
                   ),
                 ),
               ],
