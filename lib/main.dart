@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       home: LoginPage(),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/all-products': (context) => AllProductsScreen(cart: cart),
+        '/all-products': (context) => AllProductsScreen(),
         '/register': (context) => const SignupScreen(),
       },
     );

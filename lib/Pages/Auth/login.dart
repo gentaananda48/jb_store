@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jb_store/Pages/home.dart';
 import 'package:jb_store/Services/auth_service.dart';
+import 'package:jb_store/screen/all_product.dart';
+import 'package:jb_store/screen/form_signup_screen.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -141,10 +142,10 @@ class LoginPage extends StatelessWidget {
             const Text('Tidak Punya Akun?'),
             TextButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => RegisterScreen()),
-                // );
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EmailSignupScreen()),
+                );
               },
               child: const Text(
                 'Register',
@@ -203,7 +204,7 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
       print('Login successful: $data');
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Home()),
+        MaterialPageRoute(builder: (context) => AllProductsScreen()),
       );
     } else {
       print('Login failed: ${result['statusCode']}');
