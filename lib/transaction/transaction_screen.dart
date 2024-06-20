@@ -131,7 +131,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 },
               ),
               SizedBox(height: 20),
-              Text('Products:'),
+              Text(
+                'Products:',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               ...widget.cart.map((product) => ListTile(
                     leading: Image.network(
                       product.image,
