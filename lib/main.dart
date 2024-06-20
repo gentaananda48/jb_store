@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/Pages/Auth/login.dart';
 
+import 'package:jb_store/models/product.dart';
+import 'package:jb_store/screen/all_product.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final List<Product> cart = [];
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'My Store App',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -122,6 +124,13 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+      //   primarySwatch: Colors.blue,
+      // ),
+      // debugShowCheckedModeBanner: false,
+      // home: AllProductsScreen(cart: cart), //Menghubungkan Ke all_product.dart sekaligus mendapatkan akses ke cart.dart
+      // routes: {
+      //   '/all-products': (context) => AllProductsScreen(cart: cart),
+      // },
     );
   }
 }
