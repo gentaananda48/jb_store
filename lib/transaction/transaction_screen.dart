@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/models/product.dart';
-// import 'package:jb_store/transaction/detail_transaction.dart';
+import 'package:jb_store/transaction/detail_transaction.dart';
 
 class TransactionScreen extends StatefulWidget {
   final List<Product> cart;
@@ -51,16 +51,16 @@ class _TransactionScreenState extends State<TransactionScreen> {
       _transactionData['paymentMethod'] = selectedPaymentMethod;
       _transactionData['paypalNumber'] = paypalController.text;
 
-      //Navigator.push(
-      //  context,
-        // MaterialPageRoute(
-        //  builder: (context) => DetailTransactionScreen(
-        //    transactionData: _transactionData,
-        //    products: widget.cart,
-        //    cart: widget.cart,
-        //  ),
-        //),
-      //);
+      Navigator.push(
+        context,
+         MaterialPageRoute(
+          builder: (context) => DetailTransactionScreen(
+            transactionData: _transactionData,
+            products: widget.cart,
+            cart: widget.cart,
+          ),
+        ),
+      );
     }
   }
 
