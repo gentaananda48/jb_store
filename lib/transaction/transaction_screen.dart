@@ -21,7 +21,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
     'total': 0.0,
     'paymentMethod': '',
     'paypalNumber': '',
+    'paymentStatus': '',
   };
+
   String selectedPaymentMethod = '';
   TextEditingController paypalController = TextEditingController();
   bool showPaypalField = false;
@@ -35,36 +37,30 @@ class _TransactionScreenState extends State<TransactionScreen> {
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      if (selectedPaymentMethod.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please select a payment method'),
-            duration: Duration(milliseconds: 500),
-          ),
-        );
-        return;
+
+      if (showPaypalField) {
+        if (paypalController.text.isEmpty) {
+          _transactionData['paymentStatus'] = 'Payment Failed';
+        } else {
+          _transactionData['paymentStatus'] = 'Payment Success';
+        }
+      } else {
+        _transactionData['paymentStatus'] = 'Payment Success';
       }
-      if (selectedPaymentMethod == 'PayPal' && paypalController.text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please enter your PayPal number'),
-            duration: Duration(milliseconds: 500),
-          ),
-        );
-        return;
-      }
+
       _transactionData['paymentMethod'] = selectedPaymentMethod;
       _transactionData['paypalNumber'] = paypalController.text;
-      // Navigator.push(
+
+      //Navigator.push(
       //  context,
-      //  MaterialPageRoute(
-      //    builder: (context) => DetailTransactionScreen(
-      //      transactionData: _transactionData,
-      //      products: widget.cart,
-      //      cart: widget.cart,
-      //    ),
-      //  ),
-      // );
+        // MaterialPageRoute(
+        //  builder: (context) => DetailTransactionScreen(
+        //    transactionData: _transactionData,
+        //    products: widget.cart,
+        //    cart: widget.cart,
+        //  ),
+        //),
+      //);
     }
   }
 
@@ -142,7 +138,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       height: 50,
                       fit: BoxFit.contain,
                     ),
-                    title: Text(product.title),
+                    title: Text(
+                      product.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
                   )),
               SizedBox(height: 20),
@@ -170,12 +170,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     controller: paypalController,
                     decoration: InputDecoration(labelText: 'PayPal Number'),
                     keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (selectedPaymentMethod == 'PayPal' && (value == null || value.isEmpty)) {
-                        return 'Please enter your PayPal number';
-                      }
-                      return null;
-                    },
                   ),
                 ),
               ListTile(
