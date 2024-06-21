@@ -45,7 +45,11 @@ class _CartScreenState extends State<CartScreen> {
                     height: 50,
                     fit: BoxFit.contain,
                   ),
-                  title: Text(product.title),
+                  title: Text(
+                    product.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   subtitle: Text('\$${product.price}'),
                   trailing: IconButton(
                     icon: Icon(Icons.remove_circle, color: Colors.red),

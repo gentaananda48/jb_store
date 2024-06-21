@@ -1,47 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/models/product.dart';
-import 'package:jb_store/transaction/history_screen.dart';
 
-class DetailTransactionScreen extends StatelessWidget {
+class DetailHistoryScreen extends StatelessWidget {
+  final Product product;
   final Map<String, dynamic> transactionData;
-  final List<Product> products;
-  final List<Product> cart;
 
-  DetailTransactionScreen({
-    required this.transactionData,
-    required this.products,
-    required this.cart,
-  });
-
-  void clearCart(BuildContext context) {
-    // Simpan data produk yang dipesan
-    final orderedProducts = List<Product>.from(cart);
-
-    // Kosongkan cart
-    cart.clear();
-
-    // Navigasi ke halaman history
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HistoryScreen(
-          orderedProducts: orderedProducts,
-          transactionData: transactionData,
-        ),
-      ),
-    );
-
-    // Tampilkan SnackBar untuk konfirmasi
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Transaction Complete')),
-    );
-  }
+  DetailHistoryScreen({required this.product, required this.transactionData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transaction Details'),
+        title: Text('Product Details'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
@@ -129,7 +99,7 @@ class DetailTransactionScreen extends StatelessWidget {
                         child: Text(': ${transactionData['paypalNumber']}'),
                       ),
                     ]),
-                  TableRow(children: [
+                    TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text('Payment Status', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -143,47 +113,28 @@ class DetailTransactionScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                'Products',
+                'Product Details',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: cart.length,
-                itemBuilder: (context, index) {
-                  final product = cart[index];
-                  return Card(
-                    child: ListTile(
-                      leading: Image.network(
-                        product.image,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                      title: Text(
-                        product.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-                    ),
-                  );
-                },
+              Card(
+                child: ListTile(
+                  leading: Image.network(
+                    product.image,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.contain,
+                  ),
+                  title: Text(
+                    product.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
+                )
               ),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: () => clearCart(context),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-          ),
-          child: Text('Back to Home Screen'),
         ),
       ),
     );
