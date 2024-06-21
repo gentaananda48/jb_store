@@ -3,8 +3,7 @@ import 'package:jb_store/Pages/Auth/login.dart';
 
 import 'package:jb_store/models/product.dart';
 import 'package:jb_store/screen/all_product.dart';
-import 'package:jb_store/screen/signup_screen.dart';
-import 'Screen/home_screen.dart'; // Import the HomeScreen
+import 'package:jb_store/screen/signup_screen.dart'; // Import the HomeScreen
 
 void main() {
   runApp(MyApp());
