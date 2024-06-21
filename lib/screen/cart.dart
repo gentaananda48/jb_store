@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/models/product.dart';
-// import 'package:jb_store/transaction/transaction_screen.dart';
+import 'package:jb_store/transaction/transaction_screen.dart';
 
 class CartScreen extends StatefulWidget {
   final List<Product> cart;
@@ -70,12 +70,12 @@ class _CartScreenState extends State<CartScreen> {
                     onPressed: isCartEmpty
                         ? null
                         : () {
-                            // Navigator.push(
-                            //  context,
-                            // MaterialPageRoute(
-                            //    builder: (context) => TransactionScreen(cart: widget.cart),
-                            //  ),
-                            //);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TransactionScreen(cart: widget.cart),
+                              ),
+                            );
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue, // Background color
