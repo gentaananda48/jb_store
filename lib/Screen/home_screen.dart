@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Models/product.dart';
-import '../services/api_services.dart';
+import '../services/api_product.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -130,8 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       alignment: Alignment.center,
                       height: 150.0,
                       child: FutureBuilder<List<Product>>(
-                        future: ApiService().fetchProducts(category: null)
-                            as Future<List<Product>>?,
+                        future: ApiProduct().fetchProducts(),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
@@ -182,8 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Container(
                         decoration: const BoxDecoration(),
                         child: FutureBuilder<List<Product>>(
-                          future: ApiService().fetchProducts(category: null)
-                              as Future<List<Product>>?,
+                          future: ApiProduct().fetchProducts(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -247,8 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 margin: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
                 child: FutureBuilder<List<Product>>(
-                  future: ApiService().fetchProducts(category: null)
-                      as Future<List<Product>>?,
+                  future: ApiProduct().fetchProducts(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
@@ -303,8 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 margin: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
                 child: FutureBuilder<List<Product>>(
-                  future: ApiService().fetchProducts(category: null)
-                      as Future<List<Product>>?,
+                  future: ApiProduct().fetchProducts(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
