@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/models/product.dart';
-// import 'package:jb_store/transaction/history_screen.dart';
+//import 'package:jb_store/transaction/history_screen.dart';
 
 class DetailTransactionScreen extends StatelessWidget {
   final Map<String, dynamic> transactionData;
@@ -15,7 +15,7 @@ class DetailTransactionScreen extends StatelessWidget {
 
   void clearCart(BuildContext context) {
     // Simpan data produk yang dipesan
-    // final orderedProducts = List<Product>.from(cart);
+    //final orderedProducts = List<Product>.from(cart);
 
     // Kosongkan cart
     cart.clear();
@@ -98,6 +98,46 @@ class DetailTransactionScreen extends StatelessWidget {
                       child: Text(': ${transactionData['phone']}'),
                     ),
                   ]),
+                ],
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Products',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: cart.length,
+                itemBuilder: (context, index) {
+                  final product = cart[index];
+                  return Card(
+                    child: ListTile(
+                      leading: Image.network(
+                        product.image,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                      ),
+                      title: Text(
+                        product.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Payment Detail',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Table(
+                children: [
                   TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -140,37 +180,7 @@ class DetailTransactionScreen extends StatelessWidget {
                     ),
                   ]),
                 ],
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Products',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: cart.length,
-                itemBuilder: (context, index) {
-                  final product = cart[index];
-                  return Card(
-                    child: ListTile(
-                      leading: Image.network(
-                        product.image,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                      title: Text(
-                        product.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-                    ),
-                  );
-                },
-              ),
+              )
             ],
           ),
         ),
@@ -183,7 +193,7 @@ class DetailTransactionScreen extends StatelessWidget {
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
           ),
-          child: Text('Back to Home Screen'),
+          child: Text('Submit My Purchase'),
         ),
       ),
     );
