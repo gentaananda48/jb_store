@@ -206,33 +206,36 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   Widget _buildAddToCartButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0), // Mengubah radius border
-          ),
-        ),
-        ),
-        onPressed: () {
-          setState(() {
-            widget.cart.add(widget.product); // Menambahkan items ke cart
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Added to cart'),
-              duration: Duration(seconds: 1),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0), // Mengubah radius border
             ),
-          );
-        },
-        child: const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'Add to Cart',
-            style: TextStyle(fontSize: 18, color: Colors.white),
+          ),
+          ),
+          onPressed: () {
+            setState(() {
+              widget.cart.add(widget.product); // Menambahkan items ke cart
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Added to cart'),
+                duration: Duration(seconds: 1),
+              ),
+            );
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Add to Cart',
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
           ),
         ),
       ),
