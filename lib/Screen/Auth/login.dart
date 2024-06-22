@@ -342,8 +342,9 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
                     child: Container(
                       height: 55,
                       decoration: BoxDecoration(
-                        color:
-                            _isLoading ? Colors.grey : const Color(0xFF1D4ED8),
+                        color: _isLoading
+                            ? const Color.fromARGB(255, 247, 247, 247)
+                            : const Color(0xFF1D4ED8),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Center(

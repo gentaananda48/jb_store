@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jb_store/Pages/Auth/login.dart';
+import 'package:jb_store/routes.dart';
 
-import 'package:jb_store/models/product.dart';
-import 'package:jb_store/screen/all_product.dart';
-import 'package:jb_store/screen/signup_screen.dart'; // Import the HomeScreen
+import 'package:jb_store/models/product.dart'; // Import the HomeScreen
 
 void main() {
   runApp(MyApp());
@@ -36,12 +34,8 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 255, 255, 255)),
         useMaterial3: true,
       ),
-      home: LoginPage(),
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/all-products': (context) => AllProductsScreen(),
-        '/register': (context) => const SignupScreen(),
-      },
+      initialRoute: '/login',
+      routes: appRoutes,
     );
   }
 }
