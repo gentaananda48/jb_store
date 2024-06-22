@@ -39,7 +39,7 @@ class HistoryScreen extends StatelessWidget {
                   product.image,
                   width: 50,
                   height: 50,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
                 title: Text(
                   product.title,
