@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:jb_store/routes.dart';
+
+import 'package:jb_store/models/product.dart'; // Import the HomeScreen
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final List<Product> cart = [];
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'My Store App',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -28,10 +30,12 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 255, 255, 255)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/login',
+      routes: appRoutes,
     );
   }
 }
@@ -120,6 +124,13 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+      //   primarySwatch: Colors.blue,
+      // ),
+      // debugShowCheckedModeBanner: false,
+      // home: AllProductsScreen(cart: cart), //Menghubungkan Ke all_product.dart sekaligus mendapatkan akses ke cart.dart
+      // routes: {
+      //   '/all-products': (context) => AllProductsScreen(cart: cart),
+      // },
     );
   }
 }
