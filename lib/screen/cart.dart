@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:jb_store/models/product.dart';
-// import 'package:jb_store/transaction/transaction_screen.dart';
+import 'package:jb_store/transaction/transaction_screen.dart';
 
 class CartScreen extends StatefulWidget {
   final List<Product> cart;
@@ -45,7 +46,11 @@ class _CartScreenState extends State<CartScreen> {
                     height: 50,
                     fit: BoxFit.contain,
                   ),
-                  title: Text(product.title),
+                  title: Text(
+                    product.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   subtitle: Text('\$${product.price}'),
                   trailing: IconButton(
                     icon: Icon(Icons.remove_circle, color: Colors.red),
@@ -59,23 +64,26 @@ class _CartScreenState extends State<CartScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Text(
-                  'Total Price: \$${calculateTotalPrice().toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Total Price: \$${calculateTotalPrice().toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: isCartEmpty
                         ? null
                         : () {
-                            // Navigator.push(
-                            //  context,
-                            // MaterialPageRoute(
-                            //    builder: (context) => TransactionScreen(cart: widget.cart),
-                            //  ),
-                            //);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TransactionScreen(cart: widget.cart),
+                              ),
+                            );
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue, // Background color

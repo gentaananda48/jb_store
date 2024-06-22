@@ -101,7 +101,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                 backgroundColor: selectedCategory == category.toLowerCase() ? Colors.blue : Colors.white,
                 foregroundColor: selectedCategory == category.toLowerCase() ? Colors.white : Colors.black,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
               child: Text(category),
