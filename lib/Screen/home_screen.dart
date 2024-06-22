@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:jb_store/screen/all_product.dart';
 import '../Models/product.dart';
 import '../services/api_product.dart';
@@ -372,12 +373,15 @@ Widget _productCard({
               fit: BoxFit.contain,
             ),
             SizedBox(height: 8.0),
-            Text(
-              name,
-              style: TextStyle(fontSize: 12.0),
-              textAlign: TextAlign.start,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                name,
+                style: TextStyle(fontSize: 12.0),
+                textAlign: TextAlign.start,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             SizedBox(
               width: 150,
