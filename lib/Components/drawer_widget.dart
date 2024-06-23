@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jb_store/Services/profile_service.dart';
+import 'package:jb_store/services/profile_service.dart';
 
 class DrawerWidget extends StatefulWidget {
   @override
@@ -80,9 +80,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ListTile(
                   leading: Icon(Icons.location_on),
                   title: Text('Addresses'),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/addres');
-                  },
+                  onTap: () {},
                 ),
                 ListTile(
                   leading: Icon(Icons.credit_card),

@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: appRoutes,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
