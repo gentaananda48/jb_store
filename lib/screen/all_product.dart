@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/Components/bottom_navbar.dart';
+import 'package:jb_store/Components/drawer_widget.dart';
 import 'package:jb_store/Screen/order.dart';
 import 'package:jb_store/models/product.dart';
 import 'package:jb_store/services/api_services.dart';
@@ -164,9 +165,8 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('All Products'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
       ),
+      drawer: DrawerWidget(),
       body: Column(
         children: [
           Padding(

@@ -31,7 +31,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       appBar: AppBar(
         title: Text('History'),
       ),
-      drawer: SidebarDrawer(),
+      drawer: DrawerWidget(),
       body: ListView.builder(
         itemCount: widget.orderedProducts.length,
         itemBuilder: (context, index) {

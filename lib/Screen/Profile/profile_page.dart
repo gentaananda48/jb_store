@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jb_store/Components/bottom_navbar.dart';
 import 'package:jb_store/Screen/all_product.dart';
 import 'package:jb_store/Screen/order.dart';
-import 'package:jb_store/Services/profile_service.dart';
+import 'package:jb_store/services/profile_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
