@@ -17,9 +17,6 @@ class DetailTransactionScreen extends StatelessWidget {
     // Simpan data produk yang dipesan
     final orderedProducts = List<Product>.from(cart);
 
-    // Kosongkan cart
-    cart.clear();
-
     // Navigasi ke halaman history
     Navigator.pushReplacement(
       context,

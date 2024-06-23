@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jb_store/Components/bottom_navbar.dart';
+import 'package:jb_store/Components/drawer_widget.dart';// Import sidebar drawer
 import 'package:jb_store/screen/all_product.dart';
 import '../Models/product.dart';
-import '../services/api_product.dart';
+import '../services/api_product.dart';  
+ // Import bottom navigation bar
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,18 +15,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 2;
+
+  void _onItemTapped(int index){
+    setState(() {
+      _selectedIndex = index;
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(
-              Icons.menu_outlined,
-              color: Colors.black,
-              size: 25.0,
-            ),
-            const SizedBox(width: 10),
             const Text('Home Screen'),
           ],
         ),
@@ -42,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      drawer: SidebarDrawer(),  // Add Sidebar Drawer
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -69,6 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),  // Add Bottom Navigation Bar
     );
   }
 
