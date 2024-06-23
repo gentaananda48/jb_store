@@ -18,7 +18,7 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.category),
-          label: 'Categories',
+          label: 'All Product',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_cart),

@@ -143,8 +143,8 @@ class LoginPage extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EmailSignupScreen()),
+                  context,
+                  MaterialPageRoute(builder: (context) => EmailSignupScreen()),
                 );
               },
               child: const Text(

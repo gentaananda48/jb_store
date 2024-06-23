@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jb_store/Components/bottom_navbar.dart';
+import 'package:jb_store/Screen/all_product.dart';
 import '../Models/product.dart';
 import '../services/api_product.dart';
 
@@ -11,6 +13,34 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   late Future<List<Product>> futureProducts;
+  int _selectedIndex = 2;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllProductsScreen()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderScreen()),
+        );
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/profile');
+        break;
+    }
+  }
 
   @override
   void initState() {
@@ -76,6 +106,10 @@ class _OrderScreenState extends State<OrderScreen> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }
