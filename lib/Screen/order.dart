@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/Components/bottom_navbar.dart';
 import 'package:jb_store/Components/drawer_widget.dart';
-import 'package:jb_store/models/globals.dart';
 import 'package:jb_store/Screen/all_product.dart';
 import '../Models/product.dart';
 import '../services/api_product.dart';
@@ -51,19 +50,6 @@ class _OrderScreenState extends State<OrderScreen> {
     super.initState();
     futureProducts = ApiProduct().fetchProducts();
   }
-
-  void _trackOrder(Product product) {
-    // Add the product to history with "received" status
-    historyOrderScreenStateKey.currentState
-        ?.addProductToHistory(product, "Received");
-  }
-
-  void _cancelOrder(Product product) {
-    // Add the product to history with "canceled" status
-    historyOrderScreenStateKey.currentState
-        ?.addProductToHistory(product, "Canceled");
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,8 +92,6 @@ class _OrderScreenState extends State<OrderScreen> {
                       itemBuilder: (context, index) {
                         return ProductCard(
                           product: products[index],
-                          onTrack: () => _trackOrder(products[index]),
-                          onCancel: () => _cancelOrder(products[index]),
                         );
                       },
                     );
@@ -128,14 +112,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  final VoidCallback onTrack;
-  final VoidCallback onCancel;
-
+  
   const ProductCard({
     Key? key,
     required this.product,
-    required this.onTrack,
-    required this.onCancel,
   }) : super(key: key);
 
   @override
@@ -211,7 +191,7 @@ class ProductCard extends StatelessWidget {
                     borderRadius: BorderRadius.zero,
                   ),
                 ),
-                onPressed: onCancel,
+                onPressed: (){},
                 child: const Text("Cancel"),
               ),
               ElevatedButton(
@@ -222,7 +202,7 @@ class ProductCard extends StatelessWidget {
                     borderRadius: BorderRadius.zero,
                   ),
                 ),
-                onPressed: onTrack,
+                onPressed: (){},
                 child: const Text("Finish"),
               ),
             ],
