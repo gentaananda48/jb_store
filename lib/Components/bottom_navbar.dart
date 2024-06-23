@@ -23,7 +23,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     });
 
     // Handle navigation based on the selected index
-    switch (index) {
+    switch (index = _selectedIndex) {
       case 0:
         // Navigate to Home
         Navigator.pop(context);
@@ -85,7 +85,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: Colors.amber[800],
+      selectedItemColor: Colors.blue,
       onTap: _onItemTapped,
     );
   }

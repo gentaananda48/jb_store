@@ -17,7 +17,7 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   late Future<List<Product>> futureProducts;
 
-  int _selectedIndex = 2; // Update initial index to 1
+  int _selectedIndex = 1; // Update initial index to 1
 
   @override
   void initState() {
@@ -162,7 +162,7 @@ class ProductCard extends StatelessWidget {
                 product.image,
                 width: 50.0,
                 height: 50.0,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -189,7 +189,7 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
                 onPressed: onCancel,
-                child: const Text("cancel"),
+                child: const Text("Cancel"),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -200,7 +200,7 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
                 onPressed: onTrack,
-                child: const Text("track"),
+                child: const Text("Finish"),
               ),
             ],
           ),

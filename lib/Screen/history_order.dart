@@ -1,7 +1,6 @@
 // history_order.dart
 
 import 'package:flutter/material.dart';
-import 'package:jb_store/Components/bottom_navbar.dart';
 import 'package:jb_store/models/globals.dart';
 import '../Models/product.dart';
 
@@ -13,7 +12,6 @@ class HistoryOrderScreen extends StatefulWidget {
 }
 
 class HistoryOrderScreenState extends State<HistoryOrderScreen> {
-  int _selectedIndex = 2;
   List<Product> _historyProducts = [];
   Map<int, String> _status = {};
 
@@ -23,12 +21,7 @@ class HistoryOrderScreenState extends State<HistoryOrderScreen> {
       _status[product.id] = status;
     });
   }
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
+  
   @override
   
   Widget build(BuildContext context) {
@@ -48,10 +41,6 @@ class HistoryOrderScreenState extends State<HistoryOrderScreen> {
                   return HistoryProductCard(product: product, status: status!);
                 },
               ),
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }
