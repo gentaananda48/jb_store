@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/Components/bottom_navbar.dart';
+import 'package:jb_store/Screen/all_product.dart';
+import 'package:jb_store/Screen/order.dart';
 import 'package:jb_store/Services/profile_service.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -13,7 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedIndex = 3; // Set this to the index for Profile
   late Future<Map<String, dynamic>> _userData;
   bool _isEditing = false;
-  final ApiService _apiService = ApiService();
+  final ProfileService _apiService = ProfileService();
 
   @override
   void initState() {
@@ -31,10 +33,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Navigator.pushNamed(context, '/home');
         break;
       case 1:
-        // Navigate to categories page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllProductsScreen()),
+        );
         break;
       case 2:
-        // Navigate to orders page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderScreen()),
+        );
         break;
       case 3:
         Navigator.pushNamed(context, '/profile');

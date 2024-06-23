@@ -1,4 +1,10 @@
+// order_screen.dart
+
 import 'package:flutter/material.dart';
+import 'package:jb_store/Components/bottom_navbar.dart';
+import 'package:jb_store/Components/drawer_widget.dart';
+import 'package:jb_store/models/globals.dart';
+import 'package:jb_store/Screen/all_product.dart';
 import '../Models/product.dart';
 import '../services/api_product.dart';
 
@@ -11,6 +17,34 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   late Future<List<Product>> futureProducts;
+  int _selectedIndex = 2;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllProductsScreen()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderScreen()),
+        );
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/profile');
+        break;
+    }
+  } // Update initial index to 1
 
   @override
   void initState() {
@@ -18,30 +52,33 @@ class _OrderScreenState extends State<OrderScreen> {
     futureProducts = ApiProduct().fetchProducts();
   }
 
+  void _trackOrder(Product product) {
+    // Add the product to history with "received" status
+    historyOrderScreenStateKey.currentState
+        ?.addProductToHistory(product, "Received");
+  }
+
+  void _cancelOrder(Product product) {
+    // Add the product to history with "canceled" status
+    historyOrderScreenStateKey.currentState
+        ?.addProductToHistory(product, "Canceled");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(
-              Icons.menu_outlined,
-              color: Colors.black,
-              size: 25.0,
-            ),
-            const SizedBox(width: 10), // Jarak antara ikon dan teks
-            const Text('Orders'),
-          ],
-        ),
+        title: const Text('Orders'),
       ),
+      drawer: DrawerWidget(),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             TextField(
               decoration: InputDecoration(
                 hintText: 'Search...',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
@@ -51,23 +88,27 @@ class _OrderScreenState extends State<OrderScreen> {
                 print('Search term: $value');
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: FutureBuilder<List<Product>>(
                 future: futureProducts,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('Failed to load products'));
+                    return const Center(child: Text('Failed to load products'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('No products found'));
+                    return const Center(child: Text('No products found'));
                   } else {
                     List<Product> products = snapshot.data!;
                     return ListView.builder(
                       itemCount: products.length,
                       itemBuilder: (context, index) {
-                        return ProductCard(product: products[index]);
+                        return ProductCard(
+                          product: products[index],
+                          onTrack: () => _trackOrder(products[index]),
+                          onCancel: () => _cancelOrder(products[index]),
+                        );
                       },
                     );
                   }
@@ -77,20 +118,31 @@ class _OrderScreenState extends State<OrderScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
 
 class ProductCard extends StatelessWidget {
   final Product product;
+  final VoidCallback onTrack;
+  final VoidCallback onCancel;
 
-  const ProductCard({Key? key, required this.product}) : super(key: key);
+  const ProductCard({
+    Key? key,
+    required this.product,
+    required this.onTrack,
+    required this.onCancel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
-      padding: EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Color.fromARGB(255, 255, 255, 255),
         boxShadow: [
@@ -103,115 +155,77 @@ class ProductCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                  )
-                ]),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.inventory_outlined,
-                  size: 24.0,
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
+          Row(
+            children: [
+              const Icon(
+                Icons.inventory_outlined,
+                size: 24.0,
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width *
-                          0.6, // Adjust width as needed
-                      child: Text(
-                        product.title,
-                        style: TextStyle(fontSize: 14),
-                        maxLines: 2, // Maximum lines before truncating
-                        overflow: TextOverflow.ellipsis, // Handling overflow
-                      ),
+                    Text(
+                      product.title,
+                      style: const TextStyle(fontSize: 14),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    Text('Category: 21 maret 2022'),
+                    const Text('Category: 21 maret 2022'),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Container(
-            padding: EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                  )
-                ]),
-            child: Row(
-              children: [
-                Image.network(
-                  product.image,
-                  width: 50.0,
-                  height: 50.0,
-                  fit: BoxFit.cover,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Image.network(
+                product.image,
+                width: 50.0,
+                height: 50.0,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Category: ${product.category}'),
                     Text("Price: \$${product.price}"),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Container(
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                  )
-                ]),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero, // Sudut kotak
-                    ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
                   ),
-                  onPressed: () {},
-                  child: const Text("cancel"),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero, // Sudut kotak
-                    ),
+                onPressed: onCancel,
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
                   ),
-                  onPressed: () {},
-                  child: const Text("track"),
                 ),
-              ],
-            ),
+                onPressed: onTrack,
+                child: const Text("Finish"),
+              ),
+            ],
           ),
         ],
       ),

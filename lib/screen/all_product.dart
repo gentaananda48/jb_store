@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jb_store/Components/bottom_navbar.dart';
+import 'package:jb_store/Screen/order.dart';
 import 'package:jb_store/models/product.dart';
 import 'package:jb_store/services/api_services.dart';
 import 'package:jb_store/screen/detail_screen.dart';
@@ -9,6 +11,35 @@ class AllProductsScreen extends StatefulWidget {
 }
 
 class _AllProductsScreenState extends State<AllProductsScreen> {
+  int _selectedIndex = 1;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllProductsScreen()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderScreen()),
+        );
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/profile');
+        break;
+    }
+  }
+
   final ApiService apiService = ApiService();
   List<Product> products = [];
   List<Product> cart = [];
@@ -22,7 +53,8 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
 
   Future<void> fetchProducts({String? category}) async {
     try {
-      final fetchedProducts = await apiService.fetchProducts(category: category);
+      final fetchedProducts =
+          await apiService.fetchProducts(category: category);
       setState(() {
         products = fetchedProducts;
       });
@@ -40,7 +72,11 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
       ),
       builder: (BuildContext context) {
         final categories = [
-          'All', 'Men\'s Clothing', 'Women\'s Clothing', 'Electronics', 'Jewelery'
+          'All',
+          'Men\'s Clothing',
+          'Women\'s Clothing',
+          'Electronics',
+          'Jewelery'
         ];
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -50,11 +86,10 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    }, 
-                    icon: Icon(Icons.close_rounded)
-                  ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.close_rounded)),
                   Text(
                     'Product Categories',
                     style: TextStyle(fontWeight: FontWeight.bold),
@@ -68,7 +103,8 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                 title: Text(category),
                 onTap: () {
                   setState(() {
-                    selectedCategory = category == 'All' ? null : category.toLowerCase();
+                    selectedCategory =
+                        category == 'All' ? null : category.toLowerCase();
                     fetchProducts(category: selectedCategory);
                   });
                   Navigator.pop(context);
@@ -82,7 +118,13 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   }
 
   Widget buildCategoryButtons() {
-    final categories = ['All', 'Men\'s Clothing', 'Women\'s Clothing', 'Electronics', 'Jewelery'];
+    final categories = [
+      'All',
+      'Men\'s Clothing',
+      'Women\'s Clothing',
+      'Electronics',
+      'Jewelery'
+    ];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -93,13 +135,18 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
-                  selectedCategory = category == 'All' ? null : category.toLowerCase();
+                  selectedCategory =
+                      category == 'All' ? null : category.toLowerCase();
                   fetchProducts(category: selectedCategory);
                 });
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: selectedCategory == category.toLowerCase() ? Colors.blue : Colors.white,
-                foregroundColor: selectedCategory == category.toLowerCase() ? Colors.white : Colors.black,
+                backgroundColor: selectedCategory == category.toLowerCase()
+                    ? Colors.blue
+                    : Colors.white,
+                foregroundColor: selectedCategory == category.toLowerCase()
+                    ? Colors.white
+                    : Colors.black,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -154,7 +201,8 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => DetailScreen(product: product, cart: cart),
+                              builder: (context) =>
+                                  DetailScreen(product: product, cart: cart),
                             ),
                           );
                         },
@@ -180,10 +228,13 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                   '\$${product.price}',
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
@@ -194,6 +245,10 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                   ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }

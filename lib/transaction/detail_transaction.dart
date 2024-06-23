@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/models/product.dart';
 import 'package:jb_store/transaction/history_screen.dart';
-//import 'package:jb_store/transaction/history_screen.dart';
 
 class DetailTransactionScreen extends StatelessWidget {
   final Map<String, dynamic> transactionData;
@@ -17,9 +16,6 @@ class DetailTransactionScreen extends StatelessWidget {
   void clearCart(BuildContext context) {
     // Simpan data produk yang dipesan
     final orderedProducts = List<Product>.from(cart);
-
-    // Kosongkan cart
-    cart.clear();
 
     // Navigasi ke halaman history
     Navigator.pushReplacement(
@@ -62,8 +58,7 @@ class DetailTransactionScreen extends StatelessWidget {
                   TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Name',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -73,8 +68,7 @@ class DetailTransactionScreen extends StatelessWidget {
                   TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Email',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Email', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -84,8 +78,7 @@ class DetailTransactionScreen extends StatelessWidget {
                   TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Address',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Address', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -95,8 +88,7 @@ class DetailTransactionScreen extends StatelessWidget {
                   TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Phone',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Phone', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -123,7 +115,7 @@ class DetailTransactionScreen extends StatelessWidget {
                         product.image,
                         width: 50,
                         height: 50,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       ),
                       title: Text(
                         product.title,
@@ -146,20 +138,17 @@ class DetailTransactionScreen extends StatelessWidget {
                   TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Total',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Total', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          ': \$${transactionData['total'].toStringAsFixed(2)}'),
+                      child: Text(': \$${transactionData['total'].toStringAsFixed(2)}'),
                     ),
                   ]),
                   TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Payment Method',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Payment Method', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -170,8 +159,7 @@ class DetailTransactionScreen extends StatelessWidget {
                     TableRow(children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('PayPal Number',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        child: Text('PayPal Number', style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -181,8 +169,7 @@ class DetailTransactionScreen extends StatelessWidget {
                   TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Payment Status',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Payment Status', style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
