@@ -7,7 +7,7 @@ import '../Models/product.dart';
 class ApiProduct {
   final String apiUrl = "https://fakestoreapi.com/products";
 
-  Future<List<Product>> fetchProducts() async {
+  Future<List<Product>> fetchProducts({String? category}) async {
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {

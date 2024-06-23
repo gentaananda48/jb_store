@@ -17,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  String _selectedCategory = 'all';
 
   void _onItemTapped(int index) {
     setState(() {
@@ -45,6 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _onCategorySelected(String category) {
+    setState(() {
+      _selectedCategory = category;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,12 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.notifications_outlined, color: Colors.black),
-            onPressed: () {
-              // Add your action here
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.shopping_bag_outlined, color: Colors.black),
             onPressed: () {
               // Add your action here
             },
@@ -137,11 +138,26 @@ class _HomeScreenState extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  CategoryChip(label: 'All'),
-                  CategoryChip(label: 'Men\'s Clothing'),
-                  CategoryChip(label: 'Women\'s Clothing'),
-                  CategoryChip(label: 'Electronics'),
-                  CategoryChip(label: 'Jewelery'),
+                  CategoryChip(
+                    label: 'All',
+                    onSelected: () => _onCategorySelected('all'),
+                  ),
+                  CategoryChip(
+                    label: 'Men\'s Clothing',
+                    onSelected: () => _onCategorySelected('men\'s clothing'),
+                  ),
+                  CategoryChip(
+                    label: 'Women\'s Clothing',
+                    onSelected: () => _onCategorySelected('women\'s clothing'),
+                  ),
+                  CategoryChip(
+                    label: 'Electronics',
+                    onSelected: () => _onCategorySelected('electronics'),
+                  ),
+                  CategoryChip(
+                    label: 'Jewelery',
+                    onSelected: () => _onCategorySelected('jewelery'),
+                  ),
                 ],
               ),
             ),
@@ -240,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Color(0xffffffff),
             ),
             child: FutureBuilder<List<Product>>(
-              future: ApiProduct().fetchProducts(),
+              future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -306,7 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           margin: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
           child: FutureBuilder<List<Product>>(
-            future: ApiProduct().fetchProducts(),
+            future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -366,7 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           margin: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
           child: FutureBuilder<List<Product>>(
-            future: ApiProduct().fetchProducts(),
+            future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -496,17 +512,21 @@ Widget _discountCard({
 
 class CategoryChip extends StatelessWidget {
   final String label;
+  final VoidCallback onSelected;
 
-  const CategoryChip({required this.label});
+  const CategoryChip({required this.label, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5.0),
-      child: Chip(
-        label: Text(label),
-        backgroundColor: Colors.blue,
-        labelStyle: TextStyle(color: Colors.white),
+    return GestureDetector(
+      onTap: onSelected,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+        child: Chip(
+          label: Text(label),
+          backgroundColor: Colors.blue,
+          labelStyle: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

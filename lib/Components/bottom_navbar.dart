@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/screen/Profile/profile_page.dart';
+import 'package:jb_store/screen/all_product.dart';
 import 'package:jb_store/screen/home_screen.dart';
 import 'package:jb_store/screen/order.dart';
 import 'package:jb_store/transaction/history_screen.dart'; // Import HistoryOrderScreen
@@ -34,10 +35,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
         // Navigate to Orders
         Navigator.pop(context);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => OrderScreen()));
+            context, MaterialPageRoute(builder: (context) => AllProductsScreen()));
         break;
       case 2:
         // Navigate to History
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => OrderScreen()));
+        break;
+      case 3:
+        // Navigate to Profile
         Navigator.pop(context);
         Navigator.push(
             context,
@@ -47,12 +54,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       transactionData: {},
                     )));
         break;
-      case 3:
-        // Navigate to Profile
+        case 4: 
         Navigator.pop(context);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ProfileScreen()));
-        break;
+          context, MaterialPageRoute(builder: (context) => ProfileScreen()));
     }
   }
 
