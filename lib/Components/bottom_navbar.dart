@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/screen/Profile/profile_page.dart';
 import 'package:jb_store/screen/all_product.dart';
+import 'package:jb_store/screen/history_order.dart';
 import 'package:jb_store/screen/home_screen.dart';
-import 'package:jb_store/screen/order.dart';
-import 'package:jb_store/transaction/history_screen.dart'; // Import HistoryOrderScreen
+import 'package:jb_store/screen/order.dart'; // Import HistoryOrderScreen
 
 class BottomNavBar extends StatefulWidget {
   final int currentIndex;
@@ -49,10 +49,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => HistoryScreen(
-                      orderedProducts: [],
-                      transactionData: {},
-                    )));
+                builder: (context) => HistoryOrderScreen()));
         break;
         case 4: 
         Navigator.pop(context);
