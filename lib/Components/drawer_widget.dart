@@ -1,78 +1,119 @@
 import 'package:flutter/material.dart';
+import 'package:jb_store/Services/profile_service.dart';
 
-class SidebarDrawer extends StatelessWidget {
+class DrawerWidget extends StatefulWidget {
+  @override
+  _DrawerWidgetState createState() => _DrawerWidgetState();
+}
+
+class _DrawerWidgetState extends State<DrawerWidget> {
+  late Future<Map<String, dynamic>> _userData;
+  final ProfileService _profileService = ProfileService();
+
+  @override
+  void initState() {
+    super.initState();
+    _userData = _profileService.getUser(2);
+  }
+
+  void _logout() {
+    // Tambahkan logika logout yang diperlukan di sini, misalnya menghapus token
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Container(
-              width: double.infinity,
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView(
+      child: FutureBuilder<Map<String, dynamic>>(
+        future: _userData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData) {
+            return Center(child: Text('No data available'));
+          } else {
+            var user = snapshot.data!;
+            return ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
+                UserAccountsDrawerHeader(
+                  accountName: Text(
+                      '${user['name']['firstname']} ${user['name']['lastname']}'),
+                  accountEmail: Text(user['phone']),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundImage:
+                        NetworkImage("https://via.placeholder.com/150"),
+                  ),
+                  arrowColor: Colors.black,
+                ),
+                // Tambahkan ListTile untuk menuju halaman profil
                 ListTile(
-                  leading: Icon(Icons.category),
-                  title: Text('Shop By Categories'),
+                  leading: Icon(Icons.person),
+                  title: Text('Profile'),
                   onTap: () {
-                    // Handle navigation
+                    Navigator.pushNamed(context, '/profile');
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.shopping_bag),
+                  leading: Icon(Icons.history),
                   title: Text('My Orders'),
                   onTap: () {
-                    // Handle navigation
+                    // Navigate to orders page
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.favorite),
+                  leading: Icon(Icons.favorite_border),
                   title: Text('Favourites'),
                   onTap: () {
-                    // Handle navigation
+                    // Navigate to favourites page
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.help),
+                  leading: Icon(Icons.question_answer),
                   title: Text('FAQs'),
                   onTap: () {
-                    // Handle navigation
+                    // Navigate to FAQs page
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.location_on),
                   title: Text('Addresses'),
                   onTap: () {
-                    // Handle navigation
+                    Navigator.pushNamed(context, '/addres');
                   },
                 ),
+                ListTile(
+                  leading: Icon(Icons.credit_card),
+                  title: Text('Saved Cards'),
+                  onTap: () {
+                    // Navigate to saved cards page
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.description),
+                  title: Text('Terms & Conditions'),
+                  onTap: () {
+                    // Navigate to terms & conditions page
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.privacy_tip),
+                  title: Text('Privacy Policy'),
+                  onTap: () {
+                    // Navigate to privacy policy page
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text('Logout'),
+                  onTap: _logout,
+                ),
               ],
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Log Out'),
-            onTap: () {
-              // Handle log out
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-          ),
-        ],
+            );
+          }
+        },
       ),
     );
   }

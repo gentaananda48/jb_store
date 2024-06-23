@@ -9,14 +9,14 @@ class BottomNavBar extends StatefulWidget {
   final Function(int) onTap;
 
   BottomNavBar({required this.currentIndex, required this.onTap});
-  
+
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
-  
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -28,36 +28,30 @@ class _BottomNavBarState extends State<BottomNavBar> {
         // Navigate to Home
         Navigator.pop(context);
         Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context)=> HomeScreen())
-        );
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
         break;
       case 1:
         // Navigate to Orders
         Navigator.pop(context);
         Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context)=>OrderScreen())
-        );
+            context, MaterialPageRoute(builder: (context) => OrderScreen()));
         break;
       case 2:
         // Navigate to History
         Navigator.pop(context);
         Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context)=>HistoryScreen(
-            orderedProducts: [], 
-            transactionData: {},
-          ))
-        );
+            context,
+            MaterialPageRoute(
+                builder: (context) => HistoryScreen(
+                      orderedProducts: [],
+                      transactionData: {},
+                    )));
         break;
       case 3:
         // Navigate to Profile
         Navigator.pop(context);
         Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (context)=>ProfileScreen())
-        );
+            context, MaterialPageRoute(builder: (context) => ProfileScreen()));
         break;
     }
   }
@@ -70,6 +64,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.category),
+          label: 'All Product',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_cart),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jb_store/Components/bottom_navbar.dart';
 import 'package:jb_store/Components/drawer_widget.dart';
 import 'package:jb_store/models/globals.dart';
+import 'package:jb_store/Screen/all_product.dart';
 import '../Models/product.dart';
 import '../services/api_product.dart';
 
@@ -16,8 +17,34 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   late Future<List<Product>> futureProducts;
+  int _selectedIndex = 2;
 
-  int _selectedIndex = 1; // Update initial index to 1
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllProductsScreen()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderScreen()),
+        );
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/profile');
+        break;
+    }
+  } // Update initial index to 1
 
   @override
   void initState() {
@@ -25,20 +52,16 @@ class _OrderScreenState extends State<OrderScreen> {
     futureProducts = ApiProduct().fetchProducts();
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   void _trackOrder(Product product) {
     // Add the product to history with "received" status
-    historyOrderScreenStateKey.currentState?.addProductToHistory(product, "Received");
+    historyOrderScreenStateKey.currentState
+        ?.addProductToHistory(product, "Received");
   }
 
   void _cancelOrder(Product product) {
     // Add the product to history with "canceled" status
-    historyOrderScreenStateKey.currentState?.addProductToHistory(product, "Canceled");
+    historyOrderScreenStateKey.currentState
+        ?.addProductToHistory(product, "Canceled");
   }
 
   @override
@@ -47,7 +70,7 @@ class _OrderScreenState extends State<OrderScreen> {
       appBar: AppBar(
         title: const Text('Orders'),
       ),
-      drawer: SidebarDrawer(),
+      drawer: DrawerWidget(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

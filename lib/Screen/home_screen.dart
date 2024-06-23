@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jb_store/Components/bottom_navbar.dart';
-import 'package:jb_store/Components/drawer_widget.dart';// Import sidebar drawer
+import 'package:jb_store/Components/drawer_widget.dart';
+import 'package:jb_store/Screen/order.dart';
 import 'package:jb_store/screen/all_product.dart';
 import '../Models/product.dart';
-import '../services/api_product.dart';  
- // Import bottom navigation bar
+import '../services/api_product.dart';
+// Import bottom navigation bar
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,20 +16,55 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
 
-  void _onItemTapped(int index){
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
 
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AllProductsScreen()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderScreen()),
+        );
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/profile');
+        break;
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Menghilangkan panah kembali
         title: Row(
           children: [
+            Builder(
+              builder: (context) => GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                child: Icon(
+                  Icons.menu_outlined,
+                  color: Colors.black,
+                  size: 25.0,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
             const Text('Home Screen'),
           ],
         ),
@@ -47,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      drawer: SidebarDrawer(),  // Add Sidebar Drawer
+      drawer: DrawerWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -78,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-      ),  // Add Bottom Navigation Bar
+      ),
     );
   }
 
@@ -255,12 +291,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               TextButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AllProductsScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => AllProductsScreen()),
                   );
-                }, 
+                },
                 child: Text("View All"),
               )
             ],
@@ -314,12 +351,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               TextButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AllProductsScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => AllProductsScreen()),
                   );
-                }, 
+                },
                 child: Text("View All"),
               )
             ],
