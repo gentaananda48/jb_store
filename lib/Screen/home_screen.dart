@@ -330,6 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
+                    childAspectRatio: 0.7,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     children: randomProducts.map((product) {
@@ -386,6 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
+                    childAspectRatio: 0.7,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     children: randomProducts.map((product) {
@@ -442,6 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
+                    childAspectRatio: 0.7,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     children: randomProducts.map((product) {
