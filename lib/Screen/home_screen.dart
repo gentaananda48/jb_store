@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jb_store/Components/bottom_navbar.dart';
 import 'package:jb_store/Components/drawer_widget.dart';
+import 'package:jb_store/Screen/Profile/profile_page.dart';
+import 'package:jb_store/Screen/history_order.dart';
 import 'package:jb_store/Screen/order.dart';
 import 'package:jb_store/screen/all_product.dart';
 import '../Models/product.dart';
@@ -26,23 +28,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/home');
+        // Navigate to Home
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
         break;
       case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AllProductsScreen()),
-        );
+        // Navigate to Orders
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => AllProductsScreen()));
         break;
       case 2:
+        // Navigate to History
+        Navigator.pop(context);
         Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => OrderScreen()),
-        );
+            context, MaterialPageRoute(builder: (context) => OrderScreen()));
         break;
       case 3:
-        Navigator.pushNamed(context, '/profile');
+        // Navigate to Profile
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => HistoryOrderScreen()));
         break;
+      case 4:
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfileScreen()));
     }
   }
 
@@ -256,7 +268,9 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Color(0xffffffff),
             ),
             child: FutureBuilder<List<Product>>(
-              future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
+              future: ApiProduct().fetchProducts(
+                  category:
+                      _selectedCategory == 'all' ? null : _selectedCategory),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -322,7 +336,9 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           margin: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
           child: FutureBuilder<List<Product>>(
-            future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
+            future: ApiProduct().fetchProducts(
+                category:
+                    _selectedCategory == 'all' ? null : _selectedCategory),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -382,7 +398,9 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           margin: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
           child: FutureBuilder<List<Product>>(
-            future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
+            future: ApiProduct().fetchProducts(
+                category:
+                    _selectedCategory == 'all' ? null : _selectedCategory),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());

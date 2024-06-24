@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jb_store/Components/bottom_navbar.dart';
 import 'package:jb_store/Components/drawer_widget.dart';
+import 'package:jb_store/Screen/Profile/profile_page.dart';
+import 'package:jb_store/Screen/home_screen.dart';
 import 'package:jb_store/models/globals.dart';
 import 'package:jb_store/screen/all_product.dart';
 import 'package:jb_store/screen/order.dart';
@@ -19,7 +21,7 @@ class HistoryOrderScreen extends StatefulWidget {
 
 class HistoryOrderScreenState extends State<HistoryOrderScreen> {
   late Future<List<Product>> futureProducts;
-  int _selectedIndex = 2;
+  int _selectedIndex = 3;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,23 +30,33 @@ class HistoryOrderScreenState extends State<HistoryOrderScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/home');
+        // Navigate to Home
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
         break;
       case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AllProductsScreen()),
-        );
+        // Navigate to Orders
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => AllProductsScreen()));
         break;
       case 2:
+        // Navigate to History
+        Navigator.pop(context);
         Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => OrderScreen()),
-        );
+            context, MaterialPageRoute(builder: (context) => OrderScreen()));
         break;
       case 3:
-        Navigator.pushNamed(context, '/profile');
+        // Navigate to Profile
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => HistoryOrderScreen()));
         break;
+      case 4:
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfileScreen()));
     }
   } // Update initial index to 1
 
@@ -53,6 +65,7 @@ class HistoryOrderScreenState extends State<HistoryOrderScreen> {
     super.initState();
     futureProducts = ApiProduct().fetchProducts();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +115,10 @@ class HistoryOrderScreenState extends State<HistoryOrderScreen> {
 class HistoryProductCard extends StatelessWidget {
   final Product product;
 
-  const HistoryProductCard({Key? key, required this.product,}) : super(key: key);
+  const HistoryProductCard({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -171,10 +187,8 @@ class HistoryProductCard extends StatelessWidget {
             children: [
               Text(
                 'Received',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green
-                ),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
               )
             ],
           ),
