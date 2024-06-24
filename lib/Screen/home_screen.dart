@@ -18,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   String _selectedCategory = 'all';
+  String _searchTerm = '';
+  List<Product> _searchResults = [];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -49,7 +51,28 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onCategorySelected(String category) {
     setState(() {
       _selectedCategory = category;
+      _searchResults = [];
     });
+  }
+
+  void _onSearchChanged(String value) {
+    setState(() {
+      _searchTerm = value;
+    });
+
+    if (_searchTerm.isNotEmpty) {
+      ApiProduct().fetchProducts().then((products) {
+        setState(() {
+          _searchResults = products.where((product) {
+            return product.title.toLowerCase().contains(_searchTerm.toLowerCase());
+          }).toList();
+        });
+      });
+    } else {
+      setState(() {
+        _searchResults = [];
+      });
+    }
   }
 
   @override
@@ -98,23 +121,60 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                onChanged: (value) {
-                  // Handle search input change
-                  print('Search term: $value');
-                },
+                onChanged: _onSearchChanged,
               ),
             ),
-            _buildCategoriesSection(),
-            _buildPromotionalBannerSection(),
-            _buildDealOfTheDaySection(),
-            _buildHotSellingSection(),
-            _buildRecommendedSection(),
+            if (_searchTerm.isNotEmpty) _buildSearchResultsSection(),
+            if (_searchTerm.isEmpty) ...[
+              _buildCategoriesSection(),
+              _buildPromotionalBannerSection(),
+              _buildDealOfTheDaySection(),
+              _buildHotSellingSection(),
+              _buildRecommendedSection(),
+            ],
           ],
         ),
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  Widget _buildSearchResultsSection() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Search Results",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+          _searchResults.isEmpty
+              ? Text("No results found.")
+              : GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 0.7,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: _searchResults.map((product) {
+                    return _productCard(
+                      name: product.title,
+                      image: product.image,
+                      detail: product.description,
+                      price: product.price,
+                    );
+                  }).toList(),
+                ),
+        ],
       ),
     );
   }
@@ -270,11 +330,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 0.7,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     children: randomProducts.map((product) {
-                      return _discountCard(
+                      return _productCard(
                         name: product.title,
                         image: product.image,
                         detail: product.description,
@@ -292,48 +351,44 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildHotSellingSection() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(26.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Hot Selling Footwear",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AllProductsScreen()),
-                  );
-                },
-                child: Text("View All"),
-              )
-            ],
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        color: Color(0xfff6f6f6),
+      ),
+      child: Column(
+        children: [
+          SizedBox(height: 20),
+          Text(
+            "Hot Selling",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
-          child: FutureBuilder<List<Product>>(
-            future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                snapshot.data!.shuffle();
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: snapshot.data!.map((product) {
+          SizedBox(height: 20),
+          Container(
+            decoration: BoxDecoration(
+              color: Color(0xffffffff),
+            ),
+            child: FutureBuilder<List<Product>>(
+              future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  List<Product> products = snapshot.data!;
+                  products.shuffle();
+                  List<Product> randomProducts = products.take(4).toList();
+                  return GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: randomProducts.map((product) {
                       return _productCard(
                         name: product.title,
                         image: product.image,
@@ -341,59 +396,55 @@ class _HomeScreenState extends State<HomeScreen> {
                         price: product.price,
                       );
                     }).toList(),
-                  ),
-                );
-              }
-            },
+                  );
+                }
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildRecommendedSection() {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 26, right: 26),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Recommended for you",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AllProductsScreen()),
-                  );
-                },
-                child: Text("View All"),
-              )
-            ],
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        color: Color(0xfff6f6f6),
+      ),
+      child: Column(
+        children: [
+          SizedBox(height: 20),
+          Text(
+            "Recommended",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
-          child: FutureBuilder<List<Product>>(
-            future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                snapshot.data!.shuffle();
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: snapshot.data!.map((product) {
+          SizedBox(height: 20),
+          Container(
+            decoration: BoxDecoration(
+              color: Color(0xffffffff),
+            ),
+            child: FutureBuilder<List<Product>>(
+              future: ApiProduct().fetchProducts(category: _selectedCategory == 'all' ? null : _selectedCategory),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  List<Product> products = snapshot.data!;
+                  products.shuffle();
+                  List<Product> randomProducts = products.take(4).toList();
+                  return GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: randomProducts.map((product) {
                       return _productCard(
                         name: product.title,
                         image: product.image,
@@ -401,132 +452,97 @@ class _HomeScreenState extends State<HomeScreen> {
                         price: product.price,
                       );
                     }).toList(),
-                  ),
-                );
-              }
-            },
+                  );
+                }
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
-}
 
-Widget _productCard({
-  required String name,
-  required String image,
-  required String detail,
-  required double price,
-}) {
-  return GestureDetector(
-    child: Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Container(
-        width: 150,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image.network(
-              image,
-              width: 80.0,
-              height: 80.0,
-              fit: BoxFit.contain,
-            ),
-            SizedBox(height: 8.0),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                name,
-                style: TextStyle(fontSize: 12.0),
-                textAlign: TextAlign.start,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            SizedBox(
-              width: 150,
-              child: Text(
-                '\$$price',
-                style: TextStyle(fontSize: 12.0),
-              ),
-            ),
-          ],
-        ),
+  Widget _productCard({
+    required String name,
+    required String image,
+    required String detail,
+    required double price,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            spreadRadius: 2,
+            offset: Offset(0, 5),
+          )
+        ],
       ),
-    ),
-  );
-}
-
-Widget _discountCard({
-  required String name,
-  required String image,
-  required String detail,
-  required double price,
-}) {
-  return GestureDetector(
-    child: Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Container(
-        width: 150,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(
-              image,
-              width: 80.0,
-              height: 80.0,
-              fit: BoxFit.contain,
+      child: Column(
+        children: [
+          Image.network(
+            image,
+            fit: BoxFit.contain,
+            height: 100,
+            width: double.infinity,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  "\$$price",
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 8.0),
-            Text(
-              name,
-              style: TextStyle(fontSize: 11.0, fontWeight: FontWeight.bold),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            SizedBox(height: 4.0),
-            Container(
-              padding: EdgeInsets.all(5),
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                "Up to 40% Off",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-    ),
-  );
+    );
+  }
 }
 
 class CategoryChip extends StatelessWidget {
   final String label;
   final VoidCallback onSelected;
 
-  const CategoryChip({required this.label, required this.onSelected});
+  const CategoryChip({
+    Key? key,
+    required this.label,
+    required this.onSelected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onSelected,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-        child: Chip(
-          label: Text(label),
-          backgroundColor: Colors.blue,
-          labelStyle: TextStyle(color: Colors.white),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: ChoiceChip(
+        label: Text(label),
+        selected: false,
+        onSelected: (selected) {
+          if (selected) {
+            onSelected();
+          }
+        },
       ),
     );
   }
