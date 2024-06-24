@@ -1,68 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:jb_store/screen/Profile/profile_page.dart';
-import 'package:jb_store/screen/all_product.dart';
-import 'package:jb_store/screen/history_order.dart';
-import 'package:jb_store/screen/home_screen.dart';
-import 'package:jb_store/screen/order.dart'; // Import HistoryOrderScreen
 
-class BottomNavBar extends StatefulWidget {
+class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
   BottomNavBar({required this.currentIndex, required this.onTap});
 
   @override
-  _BottomNavBarState createState() => _BottomNavBarState();
-}
-
-class _BottomNavBarState extends State<BottomNavBar> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    // Handle navigation based on the selected index
-    switch (index = _selectedIndex) {
-      case 0:
-        // Navigate to Home
-        Navigator.pop(context);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        break;
-      case 1:
-        // Navigate to Orders
-        Navigator.pop(context);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AllProductsScreen()));
-        break;
-      case 2:
-        // Navigate to History
-        Navigator.pop(context);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => OrderScreen()));
-        break;
-      case 3:
-        // Navigate to Profile
-        Navigator.pop(context);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HistoryOrderScreen()));
-        break;
-        case 4: 
-        Navigator.pop(context);
-        Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ProfileScreen()));
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
-      items: const <BottomNavigationBarItem>[
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
@@ -84,9 +33,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
           label: 'Profile',
         ),
       ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: Colors.blue,
-      onTap: _onItemTapped,
+      selectedItemColor: Color(0xFF1D4ED8),
+      onTap: onTap,
     );
   }
 }

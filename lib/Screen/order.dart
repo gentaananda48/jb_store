@@ -3,7 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:jb_store/Components/bottom_navbar.dart';
 import 'package:jb_store/Components/drawer_widget.dart';
+import 'package:jb_store/Screen/Profile/profile_page.dart';
 import 'package:jb_store/Screen/all_product.dart';
+import 'package:jb_store/Screen/history_order.dart';
+import 'package:jb_store/Screen/home_screen.dart';
 import '../Models/product.dart';
 import '../services/api_product.dart';
 
@@ -25,23 +28,33 @@ class _OrderScreenState extends State<OrderScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/home');
+        // Navigate to Home
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
         break;
       case 1:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AllProductsScreen()),
-        );
+        // Navigate to Orders
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => AllProductsScreen()));
         break;
       case 2:
+        // Navigate to History
+        Navigator.pop(context);
         Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => OrderScreen()),
-        );
+            context, MaterialPageRoute(builder: (context) => OrderScreen()));
         break;
       case 3:
-        Navigator.pushNamed(context, '/profile');
+        // Navigate to Profile
+        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => HistoryOrderScreen()));
         break;
+      case 4:
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ProfileScreen()));
     }
   } // Update initial index to 1
 
@@ -50,6 +63,7 @@ class _OrderScreenState extends State<OrderScreen> {
     super.initState();
     futureProducts = ApiProduct().fetchProducts();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,7 +126,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  
+
   const ProductCard({
     Key? key,
     required this.product,
@@ -191,7 +205,7 @@ class ProductCard extends StatelessWidget {
                     borderRadius: BorderRadius.zero,
                   ),
                 ),
-                onPressed: (){},
+                onPressed: () {},
                 child: const Text("Cancel"),
               ),
               ElevatedButton(
@@ -202,7 +216,7 @@ class ProductCard extends StatelessWidget {
                     borderRadius: BorderRadius.zero,
                   ),
                 ),
-                onPressed: (){},
+                onPressed: () {},
                 child: const Text("Finish"),
               ),
             ],
