@@ -61,20 +61,6 @@ class _OrderScreenState extends State<OrderScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              onChanged: (value) {
-                // Handle search input change
-                print('Search term: $value');
-              },
-            ),
-            const SizedBox(height: 20),
             Expanded(
               child: FutureBuilder<List<Product>>(
                 future: futureProducts,
